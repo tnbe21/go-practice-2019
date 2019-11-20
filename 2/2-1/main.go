@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./error"
-	"./operator"
+	"operator/error"
+	"operator/operator"
 	"flag"
 	"fmt"
 	"os"

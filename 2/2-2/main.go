@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./convertor"
-	"./error"
+	"convertor/convertor"
+	"convertor/error"
 	"flag"
 	"fmt"
 	"os"
