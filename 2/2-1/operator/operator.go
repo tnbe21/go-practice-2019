@@ -21,6 +21,6 @@ func CreateOperator(str string) (Operator, error) {
 	case "%":
 		return &modulo{}, nil
 	default:
-		return nil, fmt.Errorf("usage: go run main.go n1 n2 operator(\"+\", \"-\", \"*\", \"/\", \"%\")")
+		return nil, fmt.Errorf("usage: go run main.go n1 n2 operator(\"+\", \"-\", \"*\", \"/\", \"%%\")")
 	}
 }
