@@ -16,12 +16,12 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for ;; {
 		cnt += 1
-		quiz := generateQuiz()
-		fmt.Fprintf(os.Stdout, "Q.%d %s\n", cnt, quiz)
+		quiz := getQuiz()
+		fmt.Fprintf(os.Stdout, "Q.%d %s\n", cnt, quiz.body)
 		fmt.Print("> ")
 		scanner.Scan()
 		ans := scanner.Text()
-		if (isRight(ans, quiz)) {
+		if (isRight(quiz, ans)) {
 		  correctCnt += 1
 			fmt.Println("正解")
 		} else {
@@ -37,12 +37,15 @@ func main() {
 	fmt.Println("***")
 }
 
-type quiz struct{}
-
-func generateQuiz() string {
-  return "2 + 4は？"
+type Quiz struct {
+  body string
+  answer string
 }
 
-func isRight(quiz, ans string) bool {
-  return true
+func getQuiz() Quiz {
+  return Quiz { "2 + 4 = ?", "6" }
+}
+
+func isRight(quiz Quiz, ans string) bool {
+  return ans == quiz.answer
 }
