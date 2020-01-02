@@ -19,11 +19,8 @@ const TIMEOUT_PER_QUIZ = 5
 func main() {
 	fmt.Println("クイズを開始します。")
 
-	for {
+	for cnt < MAX_QUIZ_COUNT {
 		doQuiz()
-		if cnt >= MAX_QUIZ_COUNT {
-			break
-		}
 	}
 
 	fmt.Println("***")
@@ -33,12 +30,11 @@ func main() {
 
 func doQuiz() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*TIMEOUT_PER_QUIZ)
+	defer cancel()
 	_quiz := quiz.GetQuiz()
-	go viewQuiz(ctx, _quiz)
+	viewQuiz(ctx, _quiz)
 	go scanAnswer(ctx, _quiz)
-	if <- finished {
-		cancel()
-	}
+	time.Sleep(time.Second*(TIMEOUT_PER_QUIZ + 1))
 }
 
 func viewQuiz(ctx context.Context, _quiz quiz.Quiz) {
@@ -48,7 +44,7 @@ func viewQuiz(ctx context.Context, _quiz quiz.Quiz) {
 		case <- ctx.Done():
 			fmt.Println("不正解")
 			cnt += 1
-			break
+			return
 		default:
 			if tickCnt > 0 {
 				fmt.Fprintf(os.Stdout, "\033[1A\r")
@@ -57,8 +53,7 @@ func viewQuiz(ctx context.Context, _quiz quiz.Quiz) {
 			time.Sleep(time.Second)
 			tickCnt += 1
 			if tickCnt >= TIMEOUT_PER_QUIZ {
-				finished <- true
-				break
+				return
 			}
 		}
 	}
@@ -68,7 +63,7 @@ func scanAnswer(ctx context.Context, _quiz quiz.Quiz) {
 	for {
 		select {
 		case <- ctx.Done():
-			break
+			return
 		default:
 			scanner := bufio.NewScanner(os.Stdin)
 			scanner.Scan()
@@ -80,7 +75,6 @@ func scanAnswer(ctx context.Context, _quiz quiz.Quiz) {
 				fmt.Println("不正解")
 			}
 			cnt += 1
-			finished <- true
 		}
 	}
 }
