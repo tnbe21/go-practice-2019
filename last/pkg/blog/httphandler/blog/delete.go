@@ -1,4 +1,4 @@
-package httphandler
+package bloghandler
 
 import (
 	"net/http"
@@ -7,9 +7,9 @@ import (
 	"tblog/pkg/terror"
 )
 
-type TopHandler struct{}
+type DeleteHandler struct{}
 
-func (TopHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (DeleteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("views/blog/index.html")
 	if err != nil {
 		terror.Print(err)
